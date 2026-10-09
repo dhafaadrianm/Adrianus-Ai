@@ -1,0 +1,6 @@
+{
+  "name": "Adrianus AI",
+  "description": "Asisten AI profesional, elegan, dan cerdas milik PT DHAFA TETAP BERUSAHA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

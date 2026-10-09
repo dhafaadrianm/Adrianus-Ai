@@ -1,0 +1,622 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --bg-color: #000000;
+  --surface-color: #161618;
+  --surface-hover: #222225;
+  --text-primary: #f5f5f7;
+  --text-secondary: #86868b;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --card-bg: #161618;
+  --input-bg: #161618;
+  --code-bg: #1e1e20;
+  --user-bubble-bg: #262629;
+}
+
+html.light, body.light, .light {
+  color-scheme: light;
+  --bg-color: #fbfbfd;
+  --surface-color: #ffffff;
+  --surface-hover: #f5f5f7;
+  --text-primary: #1d1d1f;
+  --text-secondary: #86868b;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --card-bg: #ffffff;
+  --input-bg: #f5f5f7;
+  --code-bg: #f1f1f3;
+  --user-bubble-bg: #e5e5ea;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Layout Utama Full Screen & Containment */
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+#root {
+  height: 100%;
+  height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--bg-color);
+  position: relative;
+}
+
+/* Top Bar Apple-style */
+.top-bar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 12px 20px 8px 20px;
+  flex-shrink: 0;
+  z-index: 20;
+}
+
+.theme-toggle {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.theme-toggle:hover {
+  background: var(--surface-hover);
+  border-color: rgba(128, 128, 128, 0.3);
+  transform: scale(1.04);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+/* Apple-style Clean Modern New Chat Button */
+.apple-new-chat-btn {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.apple-new-chat-btn:hover {
+  background: var(--surface-hover);
+  border-color: rgba(128, 128, 128, 0.3);
+  transform: translateY(-0.5px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.apple-new-chat-btn:active {
+  transform: scale(0.97);
+}
+
+.apple-new-chat-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2.3;
+}
+
+/* Container Utama Chat & Input */
+.main-layout {
+  flex: 1 1 0%;
+  min-height: 0;
+  max-width: 768px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0 20px;
+  position: relative;
+}
+
+/* Area Scroll Chat di Atas: scroll lancar, tidak terkunci saat streaming */
+.chat-scroll-area {
+  flex: 1 1 0%;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px 0 16px 0;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  overscroll-behavior-y: contain;
+  scroll-behavior: auto;
+  position: relative;
+}
+
+/* Header sambutan */
+.header {
+  text-align: center;
+  margin: 20px 0 24px 0;
+  flex-shrink: 0;
+}
+
+.header h1 {
+  font-size: 38px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.header p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  font-weight: 400;
+  min-height: 22px;
+  margin-bottom: 8px;
+}
+
+.disclaimer-text {
+  font-size: 12px;
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+/* Suggestion Cards Grid */
+.suggestions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 24px;
+  flex-shrink: 0;
+}
+
+.suggestion-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  user-select: none;
+}
+
+.suggestion-card:hover {
+  background-color: var(--surface-hover);
+  border-color: rgba(128, 128, 128, 0.4);
+  transform: translateY(-1px);
+}
+
+.suggestion-card:active {
+  transform: scale(0.98);
+}
+
+.suggestion-card span {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Gelembung Pesan Pengguna & AI */
+.user-message-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.user-bubble {
+  background-color: var(--user-bubble-bg);
+  color: var(--text-primary);
+  padding: 12px 18px;
+  border-radius: 18px 18px 4px 18px;
+  font-size: 15px;
+  max-width: 82%;
+  word-break: break-word;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+}
+
+.ai-message-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.ai-message-header {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ai-message-body {
+  font-size: 15px;
+  color: var(--text-primary);
+  line-height: 1.65;
+  word-break: break-word;
+}
+
+.ai-message-footer {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 14px;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+/* Apple-style Floating Scroll-to-Bottom Pill Button */
+.scroll-bottom-pill {
+  position: absolute;
+  bottom: 96px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 30;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fadeInPill 0.2s ease-out;
+}
+
+.scroll-bottom-pill:hover {
+  background: var(--surface-hover);
+  border-color: rgba(128, 128, 128, 0.4);
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.scroll-bottom-pill:active {
+  transform: translateX(-50%) scale(0.96);
+}
+
+@keyframes fadeInPill {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Bagian Bawah Tetap Terkunci (Input & Footer Permanen) */
+.bottom-pinned-area {
+  flex-shrink: 0;
+  width: 100%;
+  background-color: var(--bg-color);
+  padding: 6px 0 14px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+}
+
+/* Kotak Input Perintah */
+.input-wrapper {
+  width: 100%;
+  background-color: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 28px;
+  padding: 7px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-wrapper:focus-within {
+  border-color: rgba(128, 128, 128, 0.45);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.input-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  background: transparent !important;
+}
+
+.action-icon-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+  flex-shrink: 0;
+}
+
+.action-icon-btn:hover {
+  color: var(--text-primary);
+  background: var(--surface-hover);
+}
+
+.action-icon-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Background input transparan & mematikan background putih browser */
+.chat-input,
+input.chat-input,
+#userInput {
+  flex: 1 1 auto;
+  background-color: transparent !important;
+  background: transparent !important;
+  border: none !important;
+  color: var(--text-primary) !important;
+  font-size: 15px;
+  outline: none !important;
+  padding: 6px 8px;
+  min-width: 0;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  color-scheme: dark;
+}
+
+.chat-input:disabled,
+input.chat-input:disabled,
+#userInput:disabled {
+  background-color: transparent !important;
+  background: transparent !important;
+  color: var(--text-primary) !important;
+  opacity: 0.7;
+  cursor: default;
+}
+
+.chat-input::placeholder,
+input.chat-input::placeholder,
+#userInput::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.9;
+}
+
+/* Matikan autofill background putih Chrome/Safari */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+.chat-input:-webkit-autofill {
+  -webkit-text-fill-color: var(--text-primary) !important;
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  box-shadow: 0 0 0px 1000px transparent inset !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+/* Refined Pill Send Button */
+.send-btn {
+  background-color: var(--text-primary);
+  color: var(--bg-color);
+  border: none;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.send-btn:hover {
+  opacity: 0.9;
+}
+
+.send-btn:active {
+  transform: scale(0.96);
+}
+
+.send-btn svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mic-active {
+  color: #ff3b30 !important;
+  background: rgba(255, 59, 48, 0.12);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* Footer Disclaimer Bawah Permanen (Selalu Terlihat) */
+.footer {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  max-width: 620px;
+  margin: 0 auto;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.footer span {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.privacy-link {
+  color: var(--text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.privacy-link:hover {
+  color: var(--text-primary);
+}
+
+/* Modal Privacy Policy */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 540px;
+  max-height: 82vh;
+  overflow-y: auto;
+  padding: 24px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.modal-header h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.close-modal:hover {
+  color: var(--text-primary);
+}
+
+.modal-body {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .suggestions-grid {
+    grid-template-columns: 1fr;
+  }
+  .main-layout {
+    padding: 0 14px;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.25);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.45);
+}
